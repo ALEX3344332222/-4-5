@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD App</title>
+</head>
+<body>
+    <h1>Лаб5</h1>
+
+    <h2>Создать элемент</h2>
+    <form action="/items" method="POST">
+        <label for="ItemName">Item Name:</label>
+        <input type="text" id="itemName" name="name" required>
+        <button type="submit">Create</button>
+    </form>
+
+    <h2>База данных</h2>
+    <ul>
+        {% for item in items %}
+            <li>{{ item.id }} - {{ item.name }}
+                <a href="/items/{{ item.id }}">Edit</a>
+                <a href="#" onclick="deleteItem({{ item.id }})">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function deleteItem(itemId) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                fetch(`/items/${itemId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.reload();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
